@@ -12,9 +12,9 @@
                                     <i class="pe-7s-ticket icon-gradient bg-mean-fruit"></i>
                                 </div>
                                 <div>
-                                    Product
+                                   sản phẩm 
                                     <div class="page-title-subheading">
-                                        View, create, update, delete and manage.
+                                        /
                                     </div>
                                 </div>
                             </div>
@@ -24,7 +24,7 @@
                                     <span class="btn-icon-wrapper pr-2 opacity-7">
                                         <i class="fa fa-plus fa-w-20"></i>
                                     </span>
-                                    Create
+                                    Thêm mới
                                 </a>
                             </div>
                         </div>
@@ -39,11 +39,11 @@
                                     <form>
                                         <div class="input-group">
                                             <input type="search" name="search" id="search" value= "{{ request('search') }}"
-                                                placeholder="Search everything" class="form-control">
+                                                placeholder="Tìm tên sản phẩm" class="form-control">
                                             <span class="input-group-append">
                                                 <button type="submit" class="btn btn-primary">
                                                     <i class="fa fa-search"></i>&nbsp;
-                                                    Search
+                                                   Tìm kiếm
                                                 </button>
                                             </span>
                                         </div>
@@ -51,8 +51,8 @@
 
                                     <div class="btn-actions-pane-right">
                                         <div role="group" class="btn-group-sm btn-group">
-                                            <button class="btn btn-focus">This week</button>
-                                            <button class="active btn btn-focus">Anytime</button>
+                                            <button class="btn btn-focus">.</button>
+                                            <button class="active btn btn-focus">/</button>
                                         </div>
                                     </div>
                                 </div>
@@ -62,11 +62,11 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center">ID</th>
-                                                <th>Name / Brand</th>
-                                                <th class="text-center">Price</th>
-                                                <th class="text-center">Qty</th>
-                                                <th class="text-center">Featured</th>
-                                                <th class="text-center">Actions</th>
+                                                <th>Tên / Thương hiệu</th>
+                                                <th class="text-center">Giá</th>
+                                                <th class="text-center">Số lượng</th>
+                                                <th class="text-center">Nổi bật</th>
+                                                <th class="text-center">Hành động</th>
                                             </tr>
                                         </thead>
 
@@ -82,7 +82,7 @@
                                                                     <img style="height: 60px;"
                                                                         data-toggle="tooltip" title="Image"
                                                                         data-placement="bottom"
-                                                                        src="./front/img/products/{{ $product->productImages[0]->path ?? '' }}" alt="">
+                                                                        src="{{ asset(($product->productImages[0]->path ?? 'default-product.png')) }}" alt="">
                                                                 </div>
                                                             </div>
                                                             <div class="widget-content-left flex2">
@@ -94,7 +94,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="text-center">${{$product->price}}</td>
+                                                <td class="text-center">{{ format_price($product->price) }}</td>
                                                 <td class="text-center">{{$product->qty}}</td>
                                                 <td class="text-center">
                                                     <div class="badge badge-success mt-2">
@@ -104,7 +104,7 @@
                                                 <td class="text-center">
                                                     <a href="./admin/product/{{ $product->id }}"
                                                         class="btn btn-hover-shine btn-outline-primary border-0 btn-sm">
-                                                        Details
+                                                        Chi tiết
                                                     </a>
                                                     <a href="./admin/product/{{ $product->id }}/edit" data-toggle="tooltip" title="Edit"
                                                         data-placement="bottom" class="btn btn-outline-warning border-0 btn-sm">

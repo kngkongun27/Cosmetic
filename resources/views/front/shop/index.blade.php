@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb-text">
-                    <a href="index.html"><i class="fa fa-home"></i></a>
+                    <a href="/"><i class="fa fa-home"></i></a>
                     <span>Shop</span>
                 </div>
             </div>
@@ -25,11 +25,10 @@
             <div class="col-lg-3 col-md-6 col-sm-8 order-2 order-lg-1 produts-sidebar-filter">
                 @include('front.shop.components.products-sidebar-filter')
             </div>
-            <div class="col-lg-9 order-1 order-lg-2">
+            <div class="col-lg-9 order-1 order-lg-2" style="background:#fafafa;">
                 <div class="product-show-option">
                     <div class="row">
                         <div class="col-lg-7 col-md-7">
-           
                             <form action="">
                                 <div class="select-option">
                                     <select name="sort_by" onchange="this.form.submit();" class="sorting">

@@ -12,7 +12,8 @@ class OrderController extends Controller
 {
     private $orderService;
 
-    public function __construct(OrderServiceInterface $orderService) {
+    public function __construct(OrderServiceInterface $orderService)
+    {
         $this->orderService = $orderService;
     }
     /**
@@ -22,9 +23,10 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-       
+
         $orders = $this->orderService->searchAndPaginate('first_name', $request->get('search'));
-       // dd($orders);
+        // return $orders;
+        // dd($orders);
         return view('admin.order.index', [
             'orders' => $orders,
         ]);
@@ -61,9 +63,10 @@ class OrderController extends Controller
     {
 
         $order = $this->orderService->find($id);
-       return view('admin.order.show', [
-          'order' => $order,
-       ]);
+        // return $order;
+        return view('admin.order.show', [
+            'order' => $order,
+        ]);
     }
 
     /**
@@ -84,9 +87,10 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updateStatus(Request $request)
     {
-        //
+        $data = $this->orderService->updateStatusOrder($request);
+        return response()->json(['data' => $data]);
     }
 
     /**

@@ -3,6 +3,22 @@
 @section('title', 'Product')
 
 @section('body')
+<style>
+    .color-circle {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid #ddd;
+        transition: 0.2s;
+    }
+
+    .color-circle:hover {
+        transform: scale(1.1);
+        border-color: #333;
+    }
+
+</style>
 <!-- Star Main Product -->
 <section id="hura" class="product-shop spad page-details">
     <div class="container">
@@ -14,21 +30,23 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="product-pic-zoom">
-                            <img class="product-big-img" src="front/img/products/{{ $product->productImages[0]->path ?? '' }}" alt="">
+                            <img class="product-big-img" src="{{ isset($product->productImages[0]) ? asset($product->productImages[0]->path) : asset('storage/products/default-product.png') }}" alt="{{ $product->name }}">
                             <div class="zoom-icon">
                                 <i class="fa fa-search-plus"></i>
                             </div>
                         </div>
+
                         <div class="product-thumbs">
                             <div class="product-thumbs-track ps-slider owl-carousel">
                                 @foreach($product->productImages as $productImage)
-                                <div class="pt active" data-imgbigurl="front/img/products/{{ $productImage->path }}">
-                                    <img src="front/img/products/{{ $productImage->path }}" alt="">
+                                <div class="pt" data-imgbigurl="{{ asset($productImage->path) }}">
+                                    <img src="{{ asset($productImage->path) }}" alt="{{ $product->name }}">
                                 </div>
                                 @endforeach
                             </div>
                         </div>
                     </div>
+
                     <div class="col-lg-6">
                         <div class="product-details">
                             <div class="pd-title">
@@ -50,23 +68,18 @@
                                 <p>{{ $product->content}} </p>
 
                                 @if ($product->discount != null)
-                                <h4>{{$product->discount}} <span>{{ $product->price}}</span></h4>
+                                <h4> {{ format_price($product->discount) }}<span>{{ format_price($product->price) }}</span></h4>
                                 @else
-                                <h4>{{ $product->price}}</h4>
+                                <h4>{{ format_price($product->price) }}</h4>
                                 @endif
                             </div>
-                            <div class="pd-color">
-                                <h6>Color</h6>
-                                <div class="pd-color-choose">
+                            @php
+                            $totalQuantity = $product->productDetails->sum('qty');
+                            @endphp
 
-                                    @foreach(array_unique(array_column($product->productDetails->toArray(), 'color')) as $productColor)
-                                    <div class="cc-item">
-                                        <input type="radio" id="{{ $productColor}}">
-                                        <label for="{{ $productColor }}" class="cc-{{ $productColor }}"></label>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
+                            <div>Kho: {{ $totalQuantity }}</div>
+
+
                             <div class="pd-size-choose">
                                 @foreach(array_unique(array_column($product->productDetails->toArray(), 'size')) as $productSize)
                                 <div class="sc-item">
@@ -74,32 +87,54 @@
                                     <label for="sm-{{ $productSize}}">{{ $productSize}}</label>
                                 </div>
                                 @endforeach
-                                <!-- <div class="sc-item">
-                                        <input type="radio" id="md-size">
-                                        <label for="md-size">m</label>
-                                    </div>
-                                    <div class="sc-item">
-                                        <input type="radio" id="lg-size">
-                                        <label for="lg-size">l</label>
-                                    </div>
-                                    <div class="sc-item">
-                                        <input type="radio" id="xl-size">
-                                        <label for="xl-size">xl</label>
-                                    </div> -->
-
                             </div>
+                            {{-- Chỉ hiển thị bảng màu nếu là sản phẩm Makeup --}}
+                            {{-- Makeup chọn màu --}}
+                            @if(strtolower($product->tag) === 'makeup')
+                            <div class="pd-color-choose mt-3 mb-3">
+                                <label><strong>Chọn tông màu:</strong></label>
+                                <div class="color-options d-flex gap-2 mt-2">
+                                    <div class="color-circle" style="background-color: #B22222;" title="Đỏ quyến rũ"></div>
+                                    <div class="color-circle" style="background-color: #D47C73;" title="Hồng đất"></div>
+                                    <div class="color-circle" style="background-color: #C65D3D;" title="Cam đất"></div>
+                                    <div class="color-circle" style="background-color: #800020;" title="Đỏ rượu vang"></div>
+
+                                </div>
+                            </div>
+                            @endif
+
+                            @if(strtolower($product->tag) === 'vitamin')
+                            <div class="pd-size-choose mt-3 mb-3">
+                                <label><strong>Chọn size:</strong></label>
+                                <div class="size-options d-flex gap-2 mt-2">
+                                    <div class="size-circle" data-size="S">S</div>
+                                    <div class="size-circle" data-size="L">L</div>
+                                </div>
+                            </div>
+                            @endif
+
+                            {{-- Skin care chọn dung tích --}}
+                            @if(strtolower($product->tag) === 'skincare')
+                            <div class="pd-volume-choose mt-3 mb-3">
+                                <label><strong>Chọn dung tích (ml):</strong></label>
+                                <select class="form-control w-50" id="volumeSelect">
+                                    @foreach([30, 50, 100, 200] as $ml)
+                                    <option value="{{ $ml }}">{{ $ml }} ml</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @endif
+
                             <div class="quantity">
                                 <div class="pro-qty">
                                     <input type="text" value="1">
                                 </div>
-                                <a href="javascript:addCart({{ $product->id }})" class="primary-btn pd-cart">+ Giỏ hàng </a>
+                                <a href="javascript:addCart({{ $product->id }}, {{ $totalQuantity }})" class="primary-btn pd-cart">+ Giỏ hàng </a>
                             </div>
                             <ul class="pd-tags">
-                                <li><span>Danh Mục</span>: {{ $product->productCategory->name }}</li>
                                 <li><span>Thẻ</span>: {{ $product->tag }}</li>
                             </ul>
                             <div class="pd-share">
-                                <div class="p-code">SKu: {{$product->sku}}</div>
                                 <div class="pd-social">
                                     <a href="#"><i class="ti-facebook"></i></a>
                                     <a href="#"><i class="ti-twitter-alt"></i></a>
@@ -145,7 +180,7 @@
                                             <td class="p-catagory">Giá</td>
                                             <td>
                                                 <div class="p-price">
-                                                    {{ $product->price }}
+                                                    {{ format_price($product->price) }}
                                                 </div>
                                             </td>
                                         </tr>
@@ -161,41 +196,14 @@
                                                 <div class="p-stock"> {{ $product->qty }}</div>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td class="p-catagory">Khối Lượng</td>
-                                            <td>
-                                                <div class="p-weight">{{$product->weight}}kg</div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="p-catagory">Size</td>
-                                            <td>
-                                                @foreach(array_unique(array_column($product->productDetails->toArray(), 'size')) as $productSize)
-                                                {{$productSize}},
-                                                @endforeach
 
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="p-catagory">Màu Sắc</td>
-                                            <td>
-                                                @foreach(array_unique(array_column($product->productDetails->toArray(), 'color')) as $productColor)
-                                                <span class="cs-{{ $productColor }}"></span>
-                                                @endforeach
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="p-catagory">Mã Hàng</td>
-                                            <td>
-                                                <div class="p-code">{{ $product->sku}}</div>
-                                            </td>
-                                        </tr>
+
                                     </table>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="tab-3" role="tabpanel">
                                 <div class="customer-review-option">
-                                    <h4> {{ count($product->productComments)}} Commments</h4>
+                                    <h4> {{ count($product->productComments)}} Bình luận</h4>
                                     <div class="comment-option">
                                         @foreach($product->productComments as $productComment)
                                         <div class="co-item">
@@ -223,11 +231,8 @@
                                         <h4>Để lại đánh giá</h4>
                                         <form action="" method="post" class="comment-form">
                                             @csrf
-
                                             <input type="hidden" name="product_id" value="{{ $product->id}}">
                                             <input type="hidden" name="user_id" value="{{ \Illuminate\Support\Facades\Auth::check() ? \Illuminate\Support\Facades\Auth::user()->id : null }}">
-
-
                                             <div class="row">
                                                 <div class="col-lg-6">
                                                     <input type="text" placeholder="Name" name="name">
@@ -274,7 +279,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-title">
-                    <h2>Related Products</h2>
+                    <h2>Sản phẩm liên quan</h2>
                 </div>
             </div>
         </div>
@@ -300,19 +305,19 @@
                 searchQuery: '',
 
             };
-        },
-        mounted() {
+        }
+        , mounted() {
             axios.get('/comment')
                 .then(response => {
                     this.listComment = response.data;
                     console.log(this.listComment);
                 })
-        },
-        methods: {
+        }
+        , methods: {
 
 
-        },
-        computed: {
+        }
+        , computed: {
             // filteredItems() {
             //     if (this.searchQuery === '') {
             //         return this.tenbaiviet;
@@ -322,9 +327,10 @@
             // },
 
 
-        },
-    });
+        }
+    , });
 
     const vueInstace = app.mount("#hura");
+
 </script>
 @endsection

@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Brand;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Service\Brand\BrandServiceInterface;
-use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
 
     private $brandService;
 
-    public function __construct(BrandServiceInterface $brandService) {
+    public function __construct(BrandServiceInterface $brandService)
+    {
         $this->brandService = $brandService;
     }
     /**
@@ -76,7 +78,7 @@ class BrandController extends Controller
 
         return view('admin.brand.edit', [
             'brand' => $brand,
-        ]); 
+        ]);
     }
 
     /**
@@ -103,8 +105,33 @@ class BrandController extends Controller
      */
     public function destroy($id)
     {
-        $this->brandService->delete($id);
+        $brand = Brand::findOrFail($id);
+        // return $brand;
+        // Duyệt toàn bộ sản phẩm thuộc brand
+        foreach ($brand->products as $product) {
 
-        return redirect('admin/brand');
+            // Nếu sản phẩm đang nằm trong đơn hàng thì chặn xóa
+            if ($product->orderDetails()->exists()) {
+                // return 1;
+                return back()->with('error', 'Không thể xóa. Sản phẩm "' . $product->name . '" đang nằm trong đơn hàng.');
+            }
+
+            // Xóa ảnh sản phẩm nếu có
+            foreach ($product->productImages as $image) {
+                $path = storage_path('app/public/' . $image->path);
+                if (file_exists($path)) {
+                    unlink($path);
+                }
+                $image->delete();
+            }
+
+            // Xóa sản phẩm
+            $product->delete();
+        }
+
+        // Xóa thương hiệu
+        $brand->delete();
+
+        return redirect('admin/brand')->with('success', 'Đã xóa thương hiệu và toàn bộ sản phẩm không liên quan đơn hàng.');
     }
 }

@@ -6,6 +6,8 @@ use App\Service\ServiceInterface;
 
 interface OrderServiceInterface extends ServiceInterface {
     public function getOrderByUserId($userId);
+    public function updateStatusOrder($request);
+
 }
 
 ?>

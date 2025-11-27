@@ -12,9 +12,9 @@
                     <i class="pe-7s-ticket icon-gradient bg-mean-fruit"></i>
                 </div>
                 <div>
-                    Category
+                    Danh mục sản phẩm
                     <div class="page-title-subheading">
-                        View, create, update, delete and manage.
+                        <!-- View, create, update, delete and manage. -->
                     </div>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                     <span class="btn-icon-wrapper pr-2 opacity-7">
                         <i class="fa fa-plus fa-w-20"></i>
                     </span>
-                    Create
+                    Thêm mới
                 </a>
             </div>
         </div>
@@ -39,11 +39,11 @@
                     <form>
                         <div class="input-group">
                             <input type="search" name="search" id="search" value = "{{ request('search') }}"
-                                 placeholder="Search everything" class="form-control">
+                                 placeholder="Gõ từ khóa" class="form-control">
                             <span class="input-group-append">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-search"></i>&nbsp;
-                                    Search
+                                    Tìm kiếm
                                 </button>
                             </span>
                         </div>
@@ -51,8 +51,8 @@
 
                     <div class="btn-actions-pane-right">
                         <div role="group" class="btn-group-sm btn-group">
-                            <button class="btn btn-focus">This week</button>
-                            <button class="active btn btn-focus">Anytime</button>
+                            <button class="btn btn-focus">/</button>
+                            <button class="active btn btn-focus">.</button>
                         </div>
                     </div>
                 </div>
@@ -62,8 +62,8 @@
                         <thead>
                             <tr>
                                 <th class="text-center">ID</th>
-                                <th>Name</th>
-                                <th class="text-center">Actions</th>
+                                <th>Tên </th>
+                                <th class="text-center">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -120,13 +120,13 @@
                         <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                             <div>
                                 <p class="text-sm text-gray-700 leading-5">
-                                    Showing
+                                   Hiển thị
                                     <span class="font-medium">1</span>
-                                    to
+                                    đến
                                     <span class="font-medium">5</span>
-                                    of
-                                    <span class="font-medium">9</span>
-                                    results
+                                    của
+                                    <span class="font-medium">6</span>
+                                    kết quả
                                 </p>
                             </div>
 

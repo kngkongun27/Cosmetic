@@ -3,11 +3,14 @@
 namespace App\Providers;
 
 
+use Carbon\Carbon;
+use App\Models\Luottruycap;
 use App\Service\Blog\BlogService;
 use App\Service\User\UserService;
 use App\Service\Brand\BrandService;
 use App\Service\Order\OrderService;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
 use App\Service\Product\ProductService;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Blog\BlogRepository;
@@ -152,6 +155,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
         //
+
         
         
     }

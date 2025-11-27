@@ -9,7 +9,7 @@ class BaseService implements ServiceInterface
     public function all() {
         return $this->repository->all();
     }    
-     public function find(int $id){
+    public function find(int $id){
          return   $this->repository->find($id);
     }
      public function create(array $data){

@@ -5,7 +5,7 @@ namespace App\Service\Blog;
 use App\Service\ServiceInterface;
 
 interface BlogServiceInterface extends ServiceInterface {
-    public function  getLatestBlogs($limit = 3);
+    public function  getLatestBlogs($limit = 6);
     public function getBlogByUserId($userId);
 }
 

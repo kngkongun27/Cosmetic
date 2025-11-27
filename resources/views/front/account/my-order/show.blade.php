@@ -21,31 +21,31 @@
                     <h4>Chi Tiết Đơn Hàng</h4>
                     <div class="row">
                         <div class="col-lg-6">
-                            <label for="fir">First Name</label>
+                            <label for="fir">Họ</label>
                             <input disabled type="text" id="fir" value="{{ $order->first_name }}">
                         </div>
                         <div class="col-lg-6">
-                            <label for="fir">Last Name</label>
+                            <label for="fir">Tên</label>
                             <input disabled type="text" id="last" value="{{ $order->last_name }}">
                         </div>
                         <div class="col-lg-12">
-                            <label for="cun-name">Company Name</label>
+                            <label for="cun-name">Nơi làm việc</label>
                             <input disabled type="text" id="cun-name" value="{{ $order->company_name }}">
                         </div>
                         <div class="col-lg-12">
-                            <label for="cun">Country</label>
+                            <label for="cun">Nơi ở</label>
                             <input disabled type="text" id="cun" value="{{ $order->country }}">
                         </div>
                         <div class="col-lg-12">
-                            <label for="street">Address</label>
+                            <label for="street">Địa chỉ</label>
                             <input disabled type="text" id="street" class="street-first" value="{{ $order->street-address }}">
                         </div>
                         <div class="col-lg-12">
-                            <label for="zip">PostCode - Zip</label>
+                            <label for="zip">Mã Zip</label>
                             <input disabled type="text" id="zip" value="{{ $order->postcode_zip }}">
                         </div>
                         <div class="col-lg-12">
-                            <label for="town">Town_City</label>
+                            <label for="town">Thành phố</label>
                             <input disabled type="text" id="town" value="{{ $order->town_city }}">
                         </div>
                         <div class="col-lg-6">
@@ -53,7 +53,7 @@
                             <input disabled type="text" id="email" value="{{ $order->email }}">
                         </div>
                         <div class="col-lg-6">
-                            <label for="phone">Phone</label>
+                            <label for="phone">Số điện thoại</label>
                             <input disabled type="text" id="phone" value="{{ $order->phone }}">
                         </div>
 

@@ -21,10 +21,10 @@
 <body>
     <div class="app-container app-theme-white body-tabs-shadow">
         <div class="app-container">
-            <div class="h-100 bg-plum-plate bg-animation">
+            <div class="h-100 bg-fresh-mint bg-animation">
                 <div class="d-flex h-100 justify-content-center align-items-center">
                     <div class="mx-auto app-login-box col-md-8">
-                        <div class="app-logo-inverse mx-auto mb-3"></div>
+                        <div class=" mx-auto mb-3"></div>
                         <div class="modal-dialog w-100 mx-auto">
                             <div class="modal-content">
                             <form class="" method="POST" action="">
@@ -64,16 +64,16 @@
                           
                                 <div class="modal-footer clearfix">
                                     <div class="float-right">
-                                        <button type="submit" class="btn btn-primary btn-lg">Đăng nhập </button>
+                                        <button type="submit" class="btn  btn-lg  bg-fresh-mint">Đăng nhập </button>
                                     </div>
                                     <div class="float-right">
-                                        <a type="submit" href="../account/login" class="btn btn-primary btn-lg">Bạn là khách hàng ?</a>
+                                        <a type="submit" href="../account/login" class="btn  btn-lg bg-fresh-mint">Bạn là khách hàng ?</a>
                                     </div>
                                 </div>
                                 </form>
                             </div>
                         </div>
-                        <div class="text-center text-white opacity-8 mt-3">Copyright © CodeLean 2022</div>
+                        <div class="text-center text-white opacity-8 mt-3">Copyright © Manh_Cosmetic</div>
                     </div>
                 </div>
             </div>

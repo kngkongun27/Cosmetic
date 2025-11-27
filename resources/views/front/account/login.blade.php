@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb-text">
-                    <a href="index.html"><i class="fa fa-home"></i>Home</a>
+                    <a href="/"><i class="fa fa-home"></i>Home</a>
                     <a href="login.html">Đăng Nhập</a>
 
                     
@@ -40,7 +40,7 @@
                                 <input type="email" id="email" name="email">
                             </div>
                             <div class="group-input">
-                                <label for="password">Password *</label>
+                                <label for="password">Mật khẩu *</label>
                                 <input type="password" id="password" name="password">
                             </div>
                             <div class="group-input gi-check">

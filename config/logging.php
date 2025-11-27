@@ -113,6 +113,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+        // about chatbot 
+        'chatbot' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/chatbot.log'),
+            'level' => 'info',
+        ],
     ],
 
 ];

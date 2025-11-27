@@ -25,7 +25,7 @@
             @endforeach
         </div>
     </div>
-    <div class="filter-widget">
+    <!-- <div class="filter-widget">
         <h4 class="fw-title">Giá</h4>
         <div class="filter-range-wrap">
             <div class="range-slider">
@@ -97,5 +97,6 @@
             <a href="#">Túi Xách</a>
           
         </div>
-    </div>
+    </div> -->
+  
 </form>

@@ -37,7 +37,7 @@
                                 data-toggle="tooltip" 
                                 title="Click to change the image" 
                                 data-placement="bottom" 
-                                src="front/img/user/{{ $user->avatar }}" alt="Avatar">
+                                src="{{ asset('storage/user/' . ($user->avatar ?? 'default-avatar.jpg')) }}" alt="Avatar">
                                 <input name="image" type="file" onchange="changeImg(this)" class="image form-control-file" 
                                 style="display: none;" value="">
                                 <input type="hidden" name="image_old" value="{{ $user->avatar }}">

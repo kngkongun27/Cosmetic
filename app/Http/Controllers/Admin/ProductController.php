@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Product;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Service\Brand\BrandServiceInterface;
 use App\Service\Product\ProductServiceInterface;
 use App\Service\ProductCategory\ProductCategoryService;
 use App\Service\ProductCategory\ProductCategoryServiceInterface;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -15,12 +16,14 @@ class ProductController extends Controller
     private $brandService;
     private $productCategoryService;
 
-    public function __construct(ProductServiceInterface $productService, BrandServiceInterface $brandService, 
-                                    ProductCategoryServiceInterface $productCategoryService)
-    {   
-            $this->productService = $productService;
-            $this->brandService = $brandService;
-            $this->productCategoryService = $productCategoryService;
+    public function __construct(
+        ProductServiceInterface $productService,
+        BrandServiceInterface $brandService,
+        ProductCategoryServiceInterface $productCategoryService
+    ) {
+        $this->productService = $productService;
+        $this->brandService = $brandService;
+        $this->productCategoryService = $productCategoryService;
     }
     /**
      * Display a listing of the resource.
@@ -31,7 +34,8 @@ class ProductController extends Controller
     {
 
         $products = $this->productService
-        ->searchAndPaginate('name', $request->get('search')) ;
+            ->searchAndPaginate('name', $request->get('search'));
+
 
         return view('admin.product.index', [
             'products' => $products,
@@ -63,7 +67,20 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
+        // Xóa dấu chấm trong các giá trị tiền
+        $data['price'] = str_replace('.', '', $request->price);
+        $data['originalPr'] = str_replace('.', '', $request->originalPr);
+        $data['discount'] = str_replace('.', '', $request->discount);
+
+        // Chuyển số về dạng DECIMAL chuẩn (nếu cần)
+        $data['price'] = (float) $data['price'];
+        $data['originalPr'] = (float) $data['originalPr'];
+        $data['discount'] = (float) $data['discount'];
+
+        // Default quantity
         $data['qty'] = 0;
+
         $product = $this->productService->create($data);
 
         return redirect('admin/product/' . $product->id);
@@ -78,7 +95,7 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = $this->productService->find($id);
-            //return $product;
+        //return $product;
         return view('admin.product.show', [
             'product' => $product,
         ]);
@@ -128,8 +145,16 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $this->productService->delete($id);
+        $product = Product::findOrFail($id);
 
-        return redirect('admin/product');
+        $product->productDetails()->delete();
+
+        $product->productImages()->delete();
+
+        $product->productComments()->delete();
+
+        $product->delete();
+
+        return redirect('admin/product')->with('success', 'Xóa sản phẩm thành công!');
     }
 }

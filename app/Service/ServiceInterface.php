@@ -10,7 +10,7 @@ interface ServiceInterface {
     public function delete($id);
 
     
-    public function searchAndPaginate($searchBy, $keyword, $perPage =5 );
+    public function searchAndPaginate($searchBy, $keyword, $perPage = 5 );
 }
 
 ?>

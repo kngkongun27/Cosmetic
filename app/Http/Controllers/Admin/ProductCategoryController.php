@@ -10,7 +10,8 @@ class ProductCategoryController extends Controller
 {
     private $productCategoryService;
 
-    public function __construct(ProductCategoryServiceInterface $productCategoryService) {
+    public function __construct(ProductCategoryServiceInterface $productCategoryService)
+    {
         $this->productCategoryService = $productCategoryService;
     }
 
@@ -103,8 +104,15 @@ class ProductCategoryController extends Controller
      */
     public function destroy($id)
     {
-        $this->productCategoryService->delete($id);
+        $category = $this->productCategoryService->find($id); // hoặc ProductCategory::find($id)
+        // return $category;
+        if ($category->products()->count() > 0) {
+            return redirect('admin/category')->with('error', 'Không thể xóa danh mục vì còn sản phẩm.');
+        }
 
-        return redirect('admin/category');
+        // Không còn sản phẩm → xóa bình thường
+        $category->delete();
+
+        return redirect('admin/category')->with('success', 'Xóa danh mục thành công!');
     }
 }

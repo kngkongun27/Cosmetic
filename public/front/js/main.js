@@ -76,10 +76,32 @@
                 items: 2,
             },
             1200: {
-                items: 3,
+                items: 6,
             }
         }
     });
+    // Indexx slider 
+
+
+    $(".homepage-slider-section .product-slider-h").owlCarousel({
+        loop: true,
+        margin: 20,
+        nav: true,
+        dots: true,
+        items: 1,
+        navText: ['<i class="ti-angle-left"></i>', '<i class="ti-angle-right"></i>'],
+        smartSpeed: 1200,
+        autoplay: true,
+        autoplayTimeout: 3500,
+        responsive: {
+            0: { items: 1 },
+            576: { items: 2 },
+            768: { items: 3 },
+            1200: { items: 1 }
+        }
+    });
+
+
 
     /*------------------
        logo Carousel
@@ -146,7 +168,7 @@
     /* var timerdate = "2020/01/01"; */
 
     $("#countdown").countdown(timerdate, function (event) {
-        $(this).html(event.strftime("<div class='cd-item'><span>%D</span> <p>Days</p> </div>" + "<div class='cd-item'><span>%H</span> <p>Hrs</p> </div>" + "<div class='cd-item'><span>%M</span> <p>Mins</p> </div>" + "<div class='cd-item'><span>%S</span> <p>Secs</p> </div>"));
+        $(this).html(event.strftime("<div class='cd-item'><span>%D</span> <p>Ngày</p> </div>" + "<div class='cd-item' style=''><span>%H</span> <p>Giờ</p> </div>" + "<div class='cd-item'><span>%M</span> <p>Phút</p> </div>" + "<div class='cd-item'><span>%S</span> <p>Giây</p> </div>"));
     });
 
 
@@ -259,8 +281,8 @@
     });
 
     // Lọc sản phẩm ở trang chủ 
-    const product_men = $(".product-slider.men");
-    const product_women = $(".product-slider.women");
+    const product_men = $(".product-slider.adult");
+    const product_women = $(".product-slider.child");
 
     $('.filter-control').on('click', '.item', function () {
         const $item = $(this);
@@ -271,11 +293,11 @@
         $item.siblings().removeClass('active');
         $item.addClass('active');
 
-        if (category === 'men') {
+        if (category === 'adult') {
             product_men.owlcarousel2_filter(filter);
         }
 
-        if (category === 'women') {
+        if (category === 'child') {
             product_women.owlcarousel2_filter(filter);
         }
     })
@@ -283,53 +305,94 @@
 })(jQuery);
 
 
-function addCart(productId) {
+
+function addCart(productId, totalQuantity) {
+    if (totalQuantity === 0) {
+        alert("Sản phẩm này đã hết hàng!");
+        return;
+    }
+
+    // Lấy màu nếu có
+    let selectedColor = document.querySelector('.color-circle.active')?.title || null;
+    // Lấy dung tích nếu có
+    let selectedVolume = document.querySelector('#volumeSelect')?.value || null;
+
     $.ajax({
         type: "GET",
         url: "cart/add",
-        data: { productId: productId },
+        data: {
+            productId: productId,
+            color: selectedColor,
+            volume: selectedVolume
+        },
         success: function (response) {
+            // Cập nhật số lượng và tổng tiền
             $('.cart-count').text(response['count']);
             $('.cart-price').text('$' + response['total']);
             $('.select-total h5').text('$' + response['total']);
 
-
+            // Cập nhật cart hover
             var cartHover_tbody = $('.select-items tbody');
-            var cartHover_existItem = cartHover_tbody.find("tr" + "[data-rowid='" + response['cart'].rowId + "']");
+            var cartHover_existItem = cartHover_tbody.find("tr[data-rowid='" + response['cart'].rowId + "']");
 
             if (cartHover_existItem.length) {
-                cartHover_existItem.find('.product-selected p').text('$' + response['cart'].price.toFixed(2) + 'x' + response['cart'].qty);
+                cartHover_existItem.find('.product-selected p')
+                    .text('$' + response['cart'].price.toFixed(2) + ' x ' + response['cart'].qty);
             } else {
-
                 var newItem =
-                    '      <tr data-rowid="' + response['cart'].rowId + '">\n' +
-                    '   <td class="si-pic">\n' +
-                    '   <img style="height:70px;"\n' +
-                    '  src="front/img/products/' + response['cart'].options.images[0].path + '" alt="">\n ' +
-                    ' </td>\n' +
-                    ' <td class="si-text">\n' +
-                    '  <div class="product-selected">\n' +
-                    '  <p>$' + response['cart'].price.toFixed(2) + 'x' + response['cart'].qty + '</p>\n' +
-                    '  <h6>' + response['cart'].name + '</h6> \n' +
-                    '  </div>\n' +
-                    '   </td>\n' +
-                    '  <td class="si-close">\n' +
-                    '   <i onclick="removeCart(\'' + response['cart'].rowId + '\')" class="icon_close"></i>\n' +
-                    '    </td>\n' +
-                    '         </tr>';
+                    '<tr data-rowid="' + response['cart'].rowId + '">' +
+                    '   <td class="si-pic">' +
+                    '       <img style="height:70px;" src="front/img/products/' + response['cart'].options.images[0].path + '" alt="">' +
+                    '   </td>' +
+                    '   <td class="si-text">' +
+                    '       <div class="product-selected">' +
+                    '           <p>$' + response['cart'].price.toFixed(2) + ' x ' + response['cart'].qty + '</p>' +
+                    '           <h6>' + response['cart'].name + '</h6>' +
+                    (selectedColor ? '<small>Color: ' + selectedColor + '</small>' : '') +
+                    (selectedVolume ? '<small>Volume: ' + selectedVolume + ' ml</small>' : '') +
+                    '       </div>' +
+                    '   </td>' +
+                    '   <td class="si-close">' +
+                    '       <i onclick="removeCart(\'' + response['cart'].rowId + '\')" class="icon_close"></i>' +
+                    '   </td>' +
+                    '</tr>';
 
                 cartHover_tbody.append(newItem);
             }
 
-            alert('Add successfully! \nProduct: ' + response['cart'].name)
+            alert('Thêm vào giỏ hàng thành công! \nSản phẩm: ' + response['cart'].name);
             console.log(response);
         },
         error: function (response) {
-            alert('Thêm trật rồi , mần lại đi .');
+            alert('Thêm sản phẩm thất bại. Vui lòng thử lại.');
             console.log(response);
         },
-    })
+    });
 }
+
+// Bật active cho màu
+document.querySelectorAll('.color-circle').forEach(el => {
+    el.addEventListener('click', function () {
+        document.querySelectorAll('.color-circle').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+document.querySelectorAll('.color-circle, .size-circle').forEach(item => {
+    item.addEventListener('click', () => {
+        const parent = item.parentElement;
+        // Bỏ active tất cả trong cùng parent
+        parent.querySelectorAll('.color-circle, .size-circle').forEach(i => i.classList.remove('active'));
+        // Thêm active cho item được click
+        item.classList.add('active');
+
+        // Lấy giá trị đang chọn
+        const selectedValue = item.style.backgroundColor || item.dataset.size;
+        console.log('Đang chọn:', selectedValue);
+    });
+});
+
+
+
 
 function removeCart(rowId) {
     $.ajax({
@@ -364,7 +427,7 @@ function removeCart(rowId) {
     });
 }
 
-function updateCart(rowId , qty) {
+function updateCart(rowId, qty) {
     $.ajax({
         type: "GET",
         url: "cart/update",
@@ -385,7 +448,7 @@ function updateCart(rowId , qty) {
 
             // Xử lý ở trong shop/cart
             var cart_tbody = $('.cart-table tbody');
-            var cart_existItem = cart_tbody.find("tr" + "[data-rowId='"+ rowId + "']");
+            var cart_existItem = cart_tbody.find("tr" + "[data-rowId='" + rowId + "']");
             if (qty == 0) {
                 cart_existItem.remove();
             } else {
@@ -405,7 +468,7 @@ function destroyCart() {
     $.ajax({
         type: "GET",
         url: "cart/destroy",
-        data: {  },
+        data: {},
         success: function (response) {
 
             // Xử lí ở phần layout hover cart
@@ -417,14 +480,14 @@ function destroyCart() {
             var cartHover_tbody = $('.select-items tbody');
 
             cartHover_tbody.children().remove();
-          
+
             // Xử lí phần shop/cart/index
             var cart_tbody = $('.cart-table tbody');
 
             cart_tbody.children().remove();
 
             $('.subtotal span').text('0');
-            $ ('cart-total span').text('0');
+            $('cart-total span').text('0');
 
             alert(' Xóa thành công ! \nProduct: ' + response['cart'].name)
             console.log(response);

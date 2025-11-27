@@ -1,8 +1,9 @@
-<div class="product-item item {{ $product->tag}}">
+<div class="product-item item {{ $product->tag}}" style="width:200px">
     <div class="pi-pic">
-        <img src="/front/img/products/{{ $product->productImages[0]->path ?? '' }}" alt="">
+        <img src="{{ asset(($product->productImages[0]->path ?? 'default-product.png')) }}" alt="">
+
         @if($product->discount != null)
-        <div class="sale">Sale</div>
+        <div class="sale">Giảm giá</div>
         @endif
 
 
@@ -11,7 +12,11 @@
         </div>
         <ul>
             <li class="w-icon active"><a href="cart/add/ {{ $product->id }}"><i class="icon_bag_alt"></i></a></li>
-            <li class="quick-view"><a href="shop/product/{{ $product->id }}">+ Chi Tiết</a></li>
+            <li class="quick-view">
+                <a href="shop/product/{{ $product->id }}" title="Xem sản phẩm">
+                    <i class="fa fa-search"></i>
+                </a>
+            </li>
             <li class="w-icon"><a href="#"><i class="fa fa-random"></i></a></li>
         </ul>
     </div>
@@ -23,11 +28,11 @@
         <div class="product-price">
 
             @if ($product->discount != null)
-            ${{ $product->discount }}
-            <span>{{ $product->price}}</span>
+            {{ format_price($product->discount) }}
+            <span>{{format_price($product->price)}}</span>
 
             @else
-            <span>{{ $product->price}}</span>
+            <span>{{ format_price($product->price) }}</span>
             @endif
         </div>
     </div>

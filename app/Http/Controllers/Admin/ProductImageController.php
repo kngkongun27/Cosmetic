@@ -7,6 +7,7 @@ use App\Ultilities\Common;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use App\Service\Product\ProductServiceInterface;
 
 class ProductImageController extends Controller
@@ -49,23 +50,27 @@ class ProductImageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // khi tạo người dùng mới thì tạo luôn file upload để lưu ảnh người dùng
     public function store(Request $request, $product_id)
-    {
-        $data = $request->all();
+{
+    $request->validate([
+        'images.*' => 'required|image|max:2048', // kiểm tra từng ảnh
+    ]);
 
-        //$productImages = ProductImage::where('product_id', $product_id)->get();
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $file) {
+            $path = Common::uploadFile($file, 'products');
 
-        if ($request->hasFile('image') )
-           {
-                $data['path'] = Common::uploadFile($request->file('image'), 'front/img/products');
-                unset($data['image']);
-            }
-
-            ProductImage::create($data);
-       
-
-        return redirect('admin/product/' . $product_id . '/image');
+            ProductImage::create([
+                'product_id' => $product_id,
+                'path' => $path,
+            ]);
+        }
     }
+
+    return redirect()->back()->with('success', 'Thêm ảnh thành công!');
+}
+
 
     /**
      * Display the specified resource.
@@ -107,18 +112,21 @@ class ProductImageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($product_id, $product_image_id)
-    {
-        // delete file 
-        $file_name = ProductImage::find($product_image_id)->getAttribute('path');
+   public function destroy($product_id, $product_image_id)
+{
+    $productImage = ProductImage::find($product_image_id);
 
-        if ($file_name != '') {
-            unlink('front/img/products/' . $file_name);
+    if ($productImage) {
+        $filePath = $productImage->path;
+        if ($filePath) {
+            $storagePath = str_replace('storage/', 'public/', $filePath);
+            if (Storage::exists($storagePath)) {
+                Storage::delete($storagePath);
+            }
         }
-
-        // delete record in DB
-        ProductImage::find($product_image_id)->delete();
-
-        return redirect('admin/product/' . $product_id . '/image');
+        $productImage->delete();
     }
+
+    return redirect()->back()->with('success', 'Xóa ảnh thành công!');
+}
 }

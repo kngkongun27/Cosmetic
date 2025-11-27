@@ -4,18 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use App\Ultilities\Common;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use App\Service\User\UserServiceInterface;
 
 class UserController extends Controller
 {
     private $userService;
 
-   public function __construct(UserServiceInterface $userService) 
-   {
+    public function __construct(UserServiceInterface $userService)
+    {
         $this->userService = $userService;
-   }
+    }
 
     /**
      * Display a listing of the resource.
@@ -26,14 +28,14 @@ class UserController extends Controller
     {
         $users = $this->userService->searchAndPaginate('name', $request->get('search'));
 
-      
+
         //return $users;
 
         return view('admin.user.index', [
             'users' => $users,
         ]);
     }
-   
+
 
     /**
      * Show the form for creating a new resource.
@@ -53,23 +55,27 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-            if ($request-> get('password') != $request->get('password_confirmation')) {
-                return back() ->with('notification', 'Lỗi: Mật khẩu xác nhận không trùng khớp');
-            }
+        if ($request->get('password') != $request->get('password_confirmation')) {
+            return back()->with('notification', 'Lỗi: Mật khẩu xác nhận không trùng khớp');
+        }
 
-            $data = $request->all();
-            $data['password'] = bcrypt($request->get('password'));
+        $data = $request->all();
+        $data['password'] = bcrypt($request->get('password'));
 
-            // Xử lý file 
-            if ( $request->hasFile('image')) {
-                $data['avatar'] = Common::uploadFile($request->file('image'), 'front/img/user');
-            }
+        // Xử lý file 
+        if ($request->hasFile('image')) {
+            // Lưu file vào storage/app/public/user
+            $path = $request->file('image')->store('public/user');
 
-            $user = $this->userService->create($data);
+            // Lưu vào DB dưới dạng: 'user/filename.jpg'
+            $data['avatar'] = str_replace('public/', '', $path);
+        }
+
+        $user = $this->userService->create($data);
 
 
 
-            return redirect('admin/user/' .$user->id);
+        return redirect('admin/user/' . $user->id);
     }
 
     /**
@@ -111,9 +117,9 @@ class UserController extends Controller
 
         // Xử lý mật khẩu
         if ($request->get('password') != null) {
-            if ( $request->get('password') != $request->get('password_confirmation')) {
+            if ($request->get('password') != $request->get('password_confirmation')) {
                 return back()
-                ->with('notification', 'Mật khẩu xác nhận không khớp!');
+                    ->with('notification', 'Mật khẩu xác nhận không khớp!');
             }
 
             $data['password'] = bcrypt($request->get('password'));
@@ -123,18 +129,28 @@ class UserController extends Controller
 
         // Xử lý khi cập nhật file ảnh
         if ($request->hasFile('image')) {
-            $data['avatar'] = Common::uploadFile($request->file('image'), 'front/img/user');
+            // Upload ảnh mới vào storage/user
+            $image = $request->file('image');
+            $fileName = time() . '-' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
 
-            // Xóa file cũ 
-            $file_name_old = $request->get('image_old');
-            if($file_name_old != '') {
-                unlink('front/img/user/' . $file_name_old);
+            // Lưu vào storage/app/public/user
+            $path = $image->storeAs('public/user', $fileName);
+
+            // Lưu đường dẫn vào DB (chỉ lưu phần sau 'storage/')
+            $data['avatar'] = 'storage/user/' . $fileName;
+
+            // Xóa ảnh cũ nếu có
+            if ($request->filled('image_old')) {
+                $oldPath = str_replace('storage/', 'public/', $request->get('image_old'));
+                if (Storage::exists($oldPath)) {
+                    Storage::delete($oldPath);
+                }
             }
         }
         // Update Data
         $this->userService->update($data, $user->id);
 
-        return redirect('admin/user/' .$user->id);
+        return redirect('admin/user/' . $user->id);
     }
 
     /**
@@ -145,17 +161,20 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        // Lưu tạm tên file cũ
+        $file_name = $user->avatar;
+
+        // Xóa bản ghi user trong DB
         $this->userService->delete($user->id);
 
-        // Delete File
-        $file_name = $user->avatar;
-        if( $file_name != '') {
-            unlink('front/img/user' .$file_name);
+        // Xóa file ảnh nếu tồn tại
+        if (!empty($file_name)) {
+            $path = storage_path('app/public/user/' . $file_name);
+            if (file_exists($path)) {
+                unlink($path);
+            }
         }
 
-        return  redirect('admin/user');
+        return redirect('admin/user')->with('success', 'Xóa người dùng thành công!');
     }
-
-
-  
 }

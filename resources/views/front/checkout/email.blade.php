@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="Description" content="Enter your description here"/>
-    <title>Thông Báo Đặt Hàng |HungPham HawkVendor</title>
+    <title>Thông Báo Đặt Hàng |Manh_Cosmetic</title>
 </head>
 
 <body
@@ -25,23 +25,19 @@
 
             <div class="row"
                  style="height: 100px; padding: 10px 20px; line-height: 90px; background-color: white; box-sizing: border-box;">
-                {{--<h1 class="pl-3"
-                    style="color: orange; line-height: 00px; float: left; padding-left: 20px; padding-top: 5px;">
-                    <img src="{{$message->embed(asset('front/img/logo.png'))}}"
-                         height="40" alt="logo">
-                </h1>--}}
+               
                 <h1 class="pl-2"
                     style="color: orange; line-height: 30px; float: left; padding-left: 20px; font-size: 40px; font-weight: 500;">
-                    HungPham HawkVendor 
+                   Manh Cosmetic
                 </h1>
             </div>
 
             <div class="row" style="background-color: #00509d; height: 200px; padding: 35px; color: white;">
                 <div class="container-fluid">
                     <h3 class="m-0 p-0 mt-4" style="margin-top: 0; font-size: 28px; font-weight: 500;">
-                        <strong style="font-size: 32px;">Order Notification</strong>
+                        <strong style="font-size: 32px;">Thông báo đơn hàng</strong>
                         <br>
-                        Thank you very much
+                        Cảm ơn bạn đã mua hàng 
                     </h3>
                     <div class="row mt-5" style="margin-top: 35px; display: flex;">
                         <div class="col-6"
@@ -100,7 +96,7 @@
             <div class="row mt-2" style="margin-top: 15px;">
                 <div class="container-fluid">
                     <div class="row pl-3 py-2" style="background-color: #f4f8fd; padding: 10px 0 10px 20px;">
-                        <b>CHi tiết đơn hàng</b>
+                        <b>Chi tiết đơn hàng</b>
                     </div>
                     <div class="row pl-3 py-2" style="background-color: #fff; padding: 10px 20px 10px 20px;">
                         <table class="table table-sm table-hover"
@@ -135,7 +131,7 @@
             <div class="row mt-2" style="margin-top: 15px;">
                 <div class="container-fluid">
                     <div class="row pl-3 py-2" style="background-color: #f4f8fd; padding: 10px 0 10px 20px;">
-                        <b>Details of payment</b>
+                        <b>Chi tiết hóa đơn</b>
                     </div>
                     <div class="row pl-3 py-2"
                          style="background-color: #fff; font-size: 18px; padding: 2px 20px 10px 20px;">
@@ -144,21 +140,21 @@
                             <table class="mt-2 w-100"
                                    style="font-size: 16px; width: 100%; text-align: left;  margin-bottom: 5px;">
                                 <tr>
-                                    <td class="">Shipping fee</td>
+                                    <td class="">Phí Ship</td>
                                     <td class="pr-3 text-right" style="text-align: right; padding-right: 20px;">
-                                        0.0 $
+                                        0đ
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="">Subtotal</td>
                                     <td class="pr-3 text-right" style="text-align: right; padding-right: 20px;">
-                                        {{ $subtotal }} $
+                                       {{ format_price($subtotal) }}
                                     </td>
                                 </tr>
                                 <tr style="font-size: 18px;">
                                     <td><b>TOTAL</b></td>
                                     <td class="pr-3 text-right" style="text-align: right; padding-right: 20px;">
-                                        <b>{{ $total }} $</b>
+                                        <b>  {{ format_price($total) }} </b>
                                     </td>
                                 </tr>
                             </table>
@@ -173,7 +169,7 @@
                         <b style="color: #00509d; font-size: 18px;">More information</b>
                     </div>
                     <div class="row pl-3 py-2" style="background-color: #fff; padding: 10px 20px;">
-                        <p>Quý khách có thể kiểm tra hình thức bên ngoài của sản phẩm (nhãn hiệu, model, màu sắc, số lượng,...) trước khi
+                        <p>Quý khách có thể kiểm tra hình thức bên ngoài của sản phẩm (Thương hiệu, model, màu sắc, số lượng,...) trước khi
                              thanh toán và có thể từ chối nhận hàng nếu không hài lòng. Vui lòng không kích hoạt một
                              thiết bị điện-điện tử hoặc dùng thử sản phẩm.</p>
 
@@ -187,7 +183,7 @@
                         <p>Bạn có thể tham khảo trang Trung tâm trợ giúp hoặc liên hệ với cửa hàng bằng cách để lại lời nhắn tại
                              Trang liên hệ hoặc gửi thư tại đây. Hotline 1900 9999 (8h - 9h cả thứ 7 và chủ nhật).</p>
 
-                        <b>HungPham HawkVendor cám ơn bạn đã mua hàng.</b>
+                        <b>Manh Cosmetic cám ơn bạn đã mua hàng.</b>
                     </div>
                 </div>
             </div>

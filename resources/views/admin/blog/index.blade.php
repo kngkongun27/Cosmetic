@@ -3,6 +3,7 @@
 
 @section('body')
 
+
 <!-- Main -->
 <div class="app-main__inner">
     <div class="app-page-title">
@@ -12,9 +13,9 @@
                     <i class="pe-7s-ticket icon-gradient bg-mean-fruit"></i>
                 </div>
                 <div>
-                    Blog
+                    Tin tức
                     <div class="page-title-subheading">
-                        View, create, update, delete and manage.
+                        <!-- View, create, update, delete and manage. -->
                     </div>
                 </div>
             </div>
@@ -24,7 +25,7 @@
                     <span class="btn-icon-wrapper pr-2 opacity-7">
                         <i class="fa fa-plus fa-w-20"></i>
                     </span>
-                    Create
+                    Thêm mới
                 </a>
             </div>
         </div>
@@ -38,12 +39,11 @@
 
                     <form>
                         <div class="input-group">
-                            <input type="search" name="search" id="search" value = "{{ request('search') }}"
-                                 placeholder="Search everything" class="form-control">
+                            <input type="search" name="search" id="search" value="{{ request('search') }}" placeholder="Gõ từ khóa" class="form-control">
                             <span class="input-group-append">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-search"></i>&nbsp;
-                                    Search
+                                    Tìm kiếm
                                 </button>
                             </span>
                         </div>
@@ -62,16 +62,22 @@
                         <thead>
                             <tr>
                                 <th class="text-center">ID</th>
-                                <th>Title</th>
-                                <th class="text-center">Actions</th>
+                                <th class="text-center">Ảnh</th>
+                                <th>Tiêu đề</th>
+                                <th class="text-center">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
-
-
-                        @foreach ($blogs as $blog)
+                            @foreach ($blogs as $blog)
                             <tr>
-                                <td class="text-center text-muted">#{{ $blog->id}}</td>
+                                <td class="text-center text-muted">#{{ $blog->id }}</td>
+
+                                {{-- Ảnh đại diện bài viết --}}
+                                <td class="text-center">
+                                    <img src="{{ asset('storage/blog/' . ($blog->image ?? 'default-blog.png')) }}" alt="Blog Image" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;">
+                                </td>
+
+                                {{-- Tiêu đề --}}
                                 <td>
                                     <div class="widget-content p-0">
                                         <div class="widget-content-wrapper">
@@ -81,18 +87,19 @@
                                         </div>
                                     </div>
                                 </td>
+
+                                {{-- Hành động --}}
                                 <td class="text-center">
                                     <a href="./admin/blog/{{ $blog->id }}/edit" data-toggle="tooltip" title="Edit" data-placement="bottom" class="btn btn-outline-warning border-0 btn-sm">
                                         <span class="btn-icon-wrapper opacity-8">
                                             <i class="fa fa-edit fa-w-20"></i>
                                         </span>
                                     </a>
-                                    <form class="d-inline" action="./admin/blog/{{  $blog->id }}" method="post">
-                                        @csrf 
+
+                                    <form class="d-inline" action="./admin/blog/{{ $blog->id }}" method="post">
+                                        @csrf
                                         @method('DELETE')
-                                        <button class="btn btn-hover-shine btn-outline-danger border-0 btn-sm"
-                                         type="submit" data-toggle="tooltip" title="Delete" data-placement="bottom"
-                                          onclick="return confirm('Do you really want to delete this item?')">
+                                        <button class="btn btn-hover-shine btn-outline-danger border-0 btn-sm" type="submit" data-toggle="tooltip" title="Delete" data-placement="bottom" onclick="return confirm('Do you really want to delete this item?')">
                                             <span class="btn-icon-wrapper opacity-8">
                                                 <i class="fa fa-trash fa-w-20"></i>
                                             </span>
@@ -100,9 +107,10 @@
                                     </form>
                                 </td>
                             </tr>
-                        @endforeach
+                            @endforeach
                         </tbody>
                     </table>
+
                 </div>
 
                 <div class="d-block card-footer">
@@ -120,13 +128,13 @@
                         <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                             <div>
                                 <p class="text-sm text-gray-700 leading-5">
-                                    Showing
+                                    Hiển thị
                                     <span class="font-medium">1</span>
-                                    to
+                                    đến
                                     <span class="font-medium">5</span>
-                                    of
+                                    của
                                     <span class="font-medium">9</span>
-                                    results
+                                    kết quả
                                 </p>
                             </div>
 
@@ -158,10 +166,10 @@
                     </nav>
                 </div>
 
-        <div class="d-block card-footer">
-            {{ $blogs-> links()}}
-        </div> 
-        
+                <div class="d-block card-footer">
+                    {{ $blogs-> links()}}
+                </div>
+
 
 
             </div>
@@ -170,3 +178,5 @@
 </div>
 <!-- End Main -->
 @endsection
+
+

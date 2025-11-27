@@ -11,9 +11,9 @@
                     <i class="pe-7s-ticket icon-gradient bg-mean-fruit"></i>
                 </div>
                 <div>
-                    Product Detail
+                    Chi tiết về sản phẩm
                     <div class="page-title-subheading">
-                        View, create, update, delete and manage.
+                        <!-- View, create, update, delete and manage. -->
                     </div>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                     <span class="btn-icon-wrapper pr-2 opacity-7">
                         <i class="fa fa-plus fa-w-20"></i>
                     </span>
-                    Create
+                    Thêm mới
                 </a>
             </div>
         </div>
@@ -37,11 +37,11 @@
 
                     <form>
                         <div class="input-group">
-                            <input type="search" name="search" id="search" placeholder="Search everything" class="form-control">
+                            <input type="search" name="search" id="search" placeholder="Gõ từ khóa" class="form-control">
                             <span class="input-group-append">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-search"></i>&nbsp;
-                                    Search
+                                    Tìm kiếm
                                 </button>
                             </span>
                         </div>
@@ -49,8 +49,8 @@
 
                     <div class="btn-actions-pane-right">
                         <div role="group" class="btn-group-sm btn-group">
-                            <button class="btn btn-focus">This week</button>
-                            <button class="active btn btn-focus">Anytime</button>
+                            <button class="btn btn-focus">#</button>
+                            <button class="active btn btn-focus">.</button>
                         </div>
                     </div>
                 </div>
@@ -59,11 +59,10 @@
                     <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                         <thead>
                             <tr>
-                                <th class="pl-4">Product Name</th>
-                                <th>Color</th>
-                                <th>Size</th>
-                                <th>Qty</th>
-                                <th class="text-center">Actions</th>
+                                <th class="pl-4">Tên sản phẩm</th>
+                                <!-- <th>Màu</th> -->
+                                <th>Số lượng</th>
+                                <th class="text-center">Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,8 +70,7 @@
                             <tr>
                                 <td class="pl-4 text-muted">{{ $product->name }}</td>
 
-                                <td class="">{{ $productDetail->color }}</td>
-                                <td class="">{{ $productDetail->size }}</td>
+                              
                                 <td class="">{{ $productDetail->qty }}</td>
 
                                 <td class="text-center">

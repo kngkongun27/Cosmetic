@@ -1,19 +1,22 @@
 // = = = = = = = = = = = = = = = = changeImg = = = = = = = = = = = = = = = =
-function changeImg(input) {
-    //Nếu như tồn thuộc tính file, đồng nghĩa người dùng đã chọn file mới
-    if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        //Sự kiện file đã được load vào website
-        reader.onload = function (e) {
-            //Thay đổi đường dẫn ảnh
-            $(input).siblings('.thumbnail').attr('src', e.target.result);
-        }
-        reader.readAsDataURL(input.files[0]);
+function previewImages(input) {
+    const preview = document.getElementById('images');
+    if (input.files) {
+        Array.from(input.files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const li = document.createElement('li');
+                li.style.width = '32%';
+                li.style.display = 'inline-block';
+                li.style.margin = '5px';
+                li.innerHTML = `<img src="${e.target.result}" style="width:100%; height:200px; object-fit:cover;">`;
+                preview.appendChild(li);
+            }
+            reader.readAsDataURL(file);
+        });
     }
 }
-//Khi click #thumbnail thì cũng gọi sự kiện click #image
-$(document).ready(function () {
-    $('.thumbnail').click(function () {
-        $(this).siblings('.image').click();
-    });
+
+document.getElementById('imageUpload').addEventListener('change', function() {
+    previewImages(this);
 });

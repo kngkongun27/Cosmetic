@@ -5,7 +5,7 @@ use App\Repositories\RepositoriesInterface;
 
 interface ProductRepositoryInterface extends RepositoriesInterface {
     public function getRelatedProducts($product, $limit = 4 );
-    public function getFeaturedProductsByCategory(int $categoryId) ;
+    public function getFeaturedProductsByCategory() ;
     public function getProductOnIndex($request);
     public function getProductsByCategory($categoryName, $request);
 

@@ -25,14 +25,16 @@
                         <tbody>
                             @foreach($carts as $cart)
                             <tr data-rowid="{{ $cart->rowId }}">
-                              
+
                                 <td class="cart-pic first-row">
-                                    <img style="height:170px;" src="front/img/products/{{$cart->options->images[0]->path}}" alt="">
+                                    <img style="height:170px;" src="{{ isset($cart->options->images[0]->path) 
+                ? asset( $cart->options->images[0]->path) 
+                : asset('storage/products/default-product.png') }}" alt="{{ $cart->name }}">
                                 </td>
                                 <td class="cart-title first-row">
                                     <h5>{{ $cart->name }}</h5>
                                 </td>
-                                <td class="p-price first-row">${{ number_format($cart->price, 2)}}</td>
+                                <td class="p-price first-row">{{ number_format($cart->price, 2)}}0đ</td>
                                 <td class="qua-col first-row">
                                     <div class="quantity">
                                         <div class="pro-qty">
@@ -40,7 +42,7 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="toltal-price first-row">${{ number_format($cart->price * $cart->qty, 2)}}</td>
+                                <td class="toltal-price first-row">{{ number_format($cart->price * $cart->qty, 2)}}0đ</td>
                                 <td class="close-td first-row">
                                     <i onclick="removeCart('{{ $cart->rowId }}')" class="icon_close"></i>
 
@@ -48,7 +50,7 @@
                             </tr>
                             @endforeach
 
-                        </tbody> 
+                        </tbody>
                     </table>
                 </div>
                 <div class="row">
@@ -57,19 +59,13 @@
                             <a href="#" class="primary-btn continue-shop">Tiếp tục mua sắm</a>
                             <a href="#" class="primary-btn up-cart">Cập nhật Giỏ hàng</a>
                         </div>
-                        <div class="discount-coupon">
-                            <h6>Mã giảm giá</h6>
-                            <form action="#" class="coupon-form">
-                                <input type="text" placeholder="Nhập mã giảm giá của bạn">
-                                <button type="submit" class="site-btn coupon-btn">Xác nhận</button>
-                            </form>
-                        </div>
+                     
                     </div>
                     <div class="col-lg-4 offset-lg-4">
                         <div class="proceed-checkout">
                             <ul>
-                                <li class="subtotal">Tổng tiền trước thuế <span>${{ $total }}</span></li>
-                                <li class="cart-total">Tổng tiền <span>${{ $subtotal }}</span></li>
+                                <li class="subtotal">Tổng tiền trước thuế <span>{{ $total }}0đ</span></li>
+                                <li class="cart-total">Tổng tiền <span>{{ $subtotal }}0đ</span></li>
                             </ul>
                             <a href="./checkout" class="proceed-btn">Kiểm Tra & Thanh Toán</a>
                         </div>
@@ -77,10 +73,10 @@
                 </div>
             </div>
 
-            @else 
-                <div class="col-lg-12">
-                    <h4>Giỏ hàng của bạn đang trống</h4>
-                </div>
+            @else
+            <div class="col-lg-12">
+                <h4>Giỏ hàng của bạn đang trống</h4>
+            </div>
             @endif
         </div>
     </div>

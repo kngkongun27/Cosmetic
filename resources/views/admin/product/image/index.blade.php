@@ -14,9 +14,9 @@
                     <i class="pe-7s-ticket icon-gradient bg-mean-fruit"></i>
                 </div>
                 <div>
-                    Product Images
+                    Ảnh sản phẩm
                     <div class="page-title-subheading">
-                        View, create, update, delete and manage.
+
                     </div>
                 </div>
             </div>
@@ -29,82 +29,57 @@
                 <div class="card-body">
 
                     <div class="position-relative row form-group">
-                        <label for="name" class="col-md-3 text-md-right col-form-label">Product Name</label>
+                        <label for="name" class="col-md-3 text-md-right col-form-label">Tên sản phẩm</label>
                         <div class="col-md-9 col-xl-8">
-                            <input disabled placeholder="Product Name" type="text" class="form-control" value="{{$product->name}}">
+                            <input disabled placeholder="Tên sản phẩm" type="text" class="form-control" value="{{$product->name}}">
                         </div>
                     </div>
 
                     <div class="position-relative row form-group">
-                        <label for="" class="col-md-3 text-md-right col-form-label">Images</label>
+                        <label for="" class="col-md-3 text-md-right col-form-label">Ảnh</label>
                         <div class="col-md-9 col-xl-8">
                             <ul class="text-nowrap" id="images">
+                                <!-- Hiển thị các ảnh đã upload -->
                                 @foreach ($productImages as $productImage)
-                                <li class="float-left d-inline-block mr-2 mb-2 " style="position: relative; width: 32%;">
-                                    <!-- Hiển thị ảnh và form xóa -->
+                                <li style="position: relative; width: 32%; display:inline-block; margin:5px;">
+                                    <img src="{{ asset($productImage->path ?? 'default-product.png') }}" style="width:100%; height:200px; object-fit:cover;">
 
-                                    <form action="./admin/product/{{ $product->id }}/image/{{ $productImage->id }}" method="post">
+                                    <!-- Form xóa ảnh -->
+                                    <form action="{{ route('product.image.destroy', [$product->id, $productImage->id]) }}" method="POST" style="position:absolute; top:5px; right:5px;">
                                         @csrf
                                         @method('DELETE')
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <button type="submit" onclick="return confirm('Do you really want to delete this item?')" class="btn btn-sm btn-outline-danger border-0 position-absolute">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </form>
-                                    <div style="width: 100%; height: 220px; overflow: hidden;">
-                                        <img src="./front/img/products/{{ $productImage->path ?? 'default-product.png' }}" alt="Image">
-                                    </div>
-                                    <form method="post" action="admin/product/{{ $product->id }}/image" enctype="multipart/form-data">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="_method" value="PUT">
-                                        <div style="width: 100%; max-height: 220px; overflow: hidden;">
-                                            <img style="width: 100%; cursor: pointer;" class="thumbnail" data-toggle="tooltip" title="Thêm ảnh" data-placement="bottom" src="./dashboard/assets/images/add-image-icon.jpg" alt="Add Image">
-                                            <input name="image" type="file" onchange="changeImg(this);this.form.submit()" accept="image/x-png,image/gif,image/jpeg" class="image form-control-file" style="display: none;">
-                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        </div>
+                                        <button type="submit" onclick="return confirm('Bạn có muốn xóa ảnh này?')" class="btn btn-sm btn-danger">X</button>
                                     </form>
                                 </li>
-                                
                                 @endforeach
 
-                                
-
-                                <!-- Kiểm tra và hiển thị form thêm mới ảnh -->
-                                @if (count($productImages) === 0)
-                                <li class="float-left d-inline-block mr-2 mb-2" style="width: 32%;">
-                                    <form method="post" action="admin/product/{{ $product->id }}/image" enctype="multipart/form-data">
+                                <!-- Form thêm ảnh -->
+                                <li style="width:32%; display:inline-block; margin:5px;">
+                                    <form method="POST" action="{{ route('product.image.store', $product->id) }}" enctype="multipart/form-data">
                                         @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="_method" value="PUT">
-                                        <div style="width: 100%; max-height: 220px; overflow: hidden;">
-                                            <img style="width: 100%; cursor: pointer;" class="thumbnail" data-toggle="tooltip" title="Thêm ảnh" data-placement="bottom" src="./dashboard/assets/images/add-image-icon.jpg" alt="Add Image">
-                                            <input name="image" type="file" onchange="changeImg(this);this.form.submit()" accept="image/x-png,image/gif,image/jpeg" class="image form-control-file" style="display: none;">
-                                            <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                        </div>
+                                        <input type="file" name="images[]" multiple style="display:none;" onchange="this.form.submit()" id="imageUpload">
+                                        <img src="{{ asset('dashboard/assets/images/add-image-icon.jpg') }}" style="width:100%; height:200px; object-fit:cover; cursor:pointer;" onclick="document.getElementById('imageUpload').click()">
                                     </form>
                                 </li>
-                                @endif
                             </ul>
 
                         </div>
-                    </div>
 
-                    <div class="position-relative row form-group mb-1">
-                        <div class="col-md-9 col-xl-8 offset-md-3">
-                            <a href="./admin/product/{{ $product->id }}" class="btn-shadow btn-hover-shine btn btn-primary">
-                                <span class="btn-icon-wrapper pr-2 opacity-8">
-                                    <i class="fa fa-check fa-w-20"></i>
-                                </span>
-                                <span>OK</span>
-                            </a>
+                        <div class="position-relative row form-group mb-1">
+                            <div class="col-md-9 col-xl-8 offset-md-3">
+                                <a href="./admin/product/{{ $product->id }}" class="btn-shadow btn-hover-shine btn btn-primary">
+                                    <span class="btn-icon-wrapper pr-2 opacity-8">
+                                        <i class="fa fa-check fa-w-20"></i>
+                                    </span>
+                                    <span>OK</span>
+                                </a>
+                            </div>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- End Main -->
-@endsection
+    <!-- End Main -->
+    @endsection

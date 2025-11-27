@@ -7,23 +7,18 @@ use App\Ultilities\Constant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Cookie;
+
 
 class HomeController extends Controller
 {
     public function getLogin()
     {
 
-        return view('admin.login', [
-
-            "lang" => Cookie::get('lang'),
-
-
-        ]);
+        return view('admin.login', []);
     }
 
 
-
+    //  hàm check đăng nhập và quyền 
     public function postLogin(Request $request)
     {
         $credentials = [
@@ -48,6 +43,4 @@ class HomeController extends Controller
 
         return redirect('admin/login');
     }
-
-   
 }
