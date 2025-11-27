@@ -142,8 +142,8 @@ Route::prefix('admin')->middleware('CheckAdminLogin')->group(function () {
     Route::get('/statistical/get-orders-summary', [StatisticalController::class, 'getOrdersSummary'])->name('admin.statistical.ordersSummary');
 
     // COntact
-    Route::get('/contact', [ContactAdController::class, 'index'])->name('contact.index');
-    Route::delete('/contact/{id}', [ContactAdController::class, 'destroy'])->name('contact.destroy');
+    Route::get('/contact', [ContactAdController::class, 'index'])->name('admin.contact.index');
+    Route::delete('/contact/{id}', [ContactAdController::class, 'destroy'])->name('admin.contact.destroy');
 });
 Route::prefix('admin/product/{product_id}/image')->group(function () {
         Route::get('/', [ProductImageController::class, 'index'])->name('product.image.index');
